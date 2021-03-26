@@ -13,7 +13,7 @@ public interface ArticleService {
   Optional<Article> getArticleByName(String name);
   Optional<List<Article>> getArticleByCategoryId(Integer id);
   List<Article> getAllretiredArticles();
-  Optional<Article> getArticleBySku(String sku);
+  Optional<Article> getArticleBySku(Integer sku);
 
 
 

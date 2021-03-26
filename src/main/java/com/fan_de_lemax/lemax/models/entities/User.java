@@ -2,6 +2,7 @@ package com.fan_de_lemax.lemax.models.entities;
 
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Table(name="user")
@@ -33,18 +36,31 @@ public class User {
   @Size(min = 8, message = "password must be at least 8 characters")
   private String password;
 
+  @Column(name="articles")
+  @ManyToMany(cascade = CascadeType.ALL)
+  @OnDelete(action = OnDeleteAction.CASCADE)
+  private Set<Article> articles = new HashSet<>();
+
   @Column(name="roles")
   @ManyToMany(fetch =  FetchType.EAGER)
-  @JoinTable(name="user_roles", joinColumns = @JoinColumn(name="user_id"), inverseJoinColumns = @JoinColumn(name="role_id"))
   private Set<Role> roles = new HashSet<>();
 
-  public User(String email, String password,Set<Role> roles) {
+  public User(String email, String password, Set<Article> articles, Set<Role> roles) {
     this.email = email;
     this.password = password;
+    this.articles = articles;
     this.roles = roles;
   }
 
   public User() {
+  }
+
+  public Set<Article> getArticles() {
+    return articles;
+  }
+
+  public void setArticles(Set<Article> articles) {
+    this.articles = articles;
   }
 
   public Long getId() {
@@ -85,6 +101,7 @@ public class User {
         "id=" + id +
         ", email='" + email + '\'' +
         ", password='" + password + '\'' +
+        ", articles=" + articles +
         ", roles=" + roles +
         '}';
   }

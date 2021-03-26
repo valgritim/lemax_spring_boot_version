@@ -43,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService{
   }
 
   @Override
-  public Optional<Article> getArticleBySku(String sku) {
+  public Optional<Article> getArticleBySku(Integer sku) {
     return (articleRepository.getArticleBySku(sku));
   }
 }
