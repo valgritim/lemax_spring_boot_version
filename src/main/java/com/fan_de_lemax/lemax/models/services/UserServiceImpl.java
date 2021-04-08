@@ -13,13 +13,9 @@ public class UserServiceImpl implements UserService{
   @Autowired
   private UserRepository userRepository;
 
-  public UserServiceImpl(UserRepository userRepository) {
-    this.userRepository = userRepository;
-  }
-
-  @Override
-  public Optional<User> getUserByEmail(String email) {
-    return userRepository.findUserByEmail(email);
+   @Override
+  public Optional<User> getUserByUsername(String username) {
+    return userRepository.findByUsername(username);
   }
 
   @Override
@@ -33,8 +29,9 @@ public class UserServiceImpl implements UserService{
   }
 
   @Override
-  public Optional<User> saveOrUpdateUser(User user) {
-    return Optional.of(userRepository.saveAndFlush(user));
+  public Boolean saveOrUpdateUser(User user) {
+    userRepository.save(user);
+   return true;
   }
 
   @Override

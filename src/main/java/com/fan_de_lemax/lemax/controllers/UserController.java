@@ -37,6 +37,12 @@ public class UserController {
     return new ResponseEntity<List<User>>(usersFromDb, HttpStatus.OK);
   }
 
+  @GetMapping(value="/id/{userId}")
+  public ResponseEntity<User> getUserById(@PathVariable(value="userId") Long userId){
+        User user = userService.getUserById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User id " + userId + " not found in DB"));
+    return new ResponseEntity<User>(user, HttpStatus.OK);
+  }
+
   @GetMapping(value="/{userId}")
   public ResponseEntity<Set<Article>> fetchArticlesByUser(@PathVariable(value="userId") Long userId){
     User user = userService.getUserById(userId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "user Id nr " + userId + " not found in DB"));
@@ -46,7 +52,7 @@ public class UserController {
   }
 
   @PutMapping(value="/{userId}")
-  public ResponseEntity<User> addArticleByUser(@RequestBody Article articleRequest , @PathVariable(value="userId") Long userId){
+  public ResponseEntity<Boolean> addArticleByUser(@RequestBody Article articleRequest , @PathVariable(value="userId") Long userId){
     //Je récupère le user dans la DB
     User user = userService.getUserById(userId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "user Id nr " + userId + " not found in DB"));
 
@@ -54,8 +60,13 @@ public class UserController {
       /* je rajoute l'article dans la liste des articles du user */
       user.getArticles().add(articleRequest);
       //je sauvegarde le user
-      User userUpdated = userService.saveOrUpdateUser(user).orElseThrow(()-> new ResponseStatusException(HttpStatus.BAD_REQUEST, "erreur dans la sauvegarde du user"));
-      return new ResponseEntity<User>(userUpdated, HttpStatus.OK);
+      try{
+        boolean userUpdated = userService.saveOrUpdateUser(user);
+        return new ResponseEntity<Boolean>(userUpdated, HttpStatus.OK);
+      } catch (Exception e){
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "erreur dans la sauvegarde du user");
+      }
+
     }  else {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aucune donnée en paramètre");
     }

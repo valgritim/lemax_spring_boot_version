@@ -1,5 +1,6 @@
 package com.fan_de_lemax.lemax.models.entities;
 
+import com.fan_de_lemax.lemax.security.EnumRole;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,12 +21,14 @@ public class Role {
 
   @Enumerated(EnumType.STRING)
   @NaturalId
-  @Column(length = 60)
-  private RoleName role;
+  @Column(length = 20)
+  private EnumRole roleName;
 
-  public Role(RoleName role) {
-    super();
-    this.role = role;
+  public Role(EnumRole roleName) {
+    this.roleName = roleName;
+  }
+
+  public Role() {
   }
 
   public Long getId() {
@@ -36,19 +39,19 @@ public class Role {
     this.id = id;
   }
 
-  public RoleName getRole() {
-    return role;
+  public EnumRole getRoleName() {
+    return roleName;
   }
 
-  public void setRole(RoleName role) {
-    this.role = role;
+  public void setRole(EnumRole roleName) {
+    this.roleName = roleName;
   }
 
   @Override
   public String toString() {
     return "Role{" +
         "id=" + id +
-        ", role=" + role +
+        ", role=" + roleName +
         '}';
   }
 }

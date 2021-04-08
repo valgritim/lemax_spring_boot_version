@@ -7,22 +7,24 @@ import javax.validation.constraints.Size;
 
 public class RegisterForm {
     @NotNull
-    @Size(min=8, max=20)
+    @Email
     private String email;
 
     @NotNull
-    @Email
+    @Size(min=8)
     private String password;
 
-    private Set<String> role;
+    @NotNull
+    @Size(min=2)
+    private String pseudo;
 
   public RegisterForm(
       @NotNull @Size(min = 8, max = 20) String email,
-      @NotNull @Email String password, Set<String> role) {
+      @NotNull @Email String password,
+      @NotNull @Size(min = 2) String pseudo, Set<String> role) {
     this.email = email;
     this.password = password;
-    this.role = role;
-  }
+    this.pseudo = pseudo;  }
 
   public RegisterForm() {
   }
@@ -35,14 +37,6 @@ public class RegisterForm {
     this.email = email;
   }
 
-  @Override
-  public String toString() {
-    return "RegisterForm{" +
-        "email='" + email + '\'' +
-        ", password='" + password + '\'' +
-        ", role=" + role +
-        '}';
-  }
 
   public String getPassword() {
     return password;
@@ -52,11 +46,20 @@ public class RegisterForm {
     this.password = password;
   }
 
-  public Set<String> getRole() {
-    return role;
+  public String getPseudo() {
+    return pseudo;
   }
 
-  public void setRole(Set<String> role) {
-    this.role = role;
+  public void setPseudo(String pseudo) {
+    this.pseudo = pseudo;
+  }
+
+  @Override
+  public String toString() {
+    return "RegisterForm{" +
+        "email='" + email + '\'' +
+        ", password='" + password + '\'' +
+        ", pseudo='" + pseudo + '\'' +
+        '}';
   }
 }
